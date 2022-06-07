@@ -1,0 +1,1 @@
+INSERT INTO Accounts(Id, name, ContactEmail) Values (1, 'Timo', 'timo@taling.me');
