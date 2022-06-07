@@ -2,5 +2,9 @@ package com.timo.tutorcenter.category.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CateSubRepository extends JpaRepository<CateSub, Long> {
+
+    List<CateSub> findAllByCateMainOrderByDisplayOrderAsc(CateMain cateMain);
 }
