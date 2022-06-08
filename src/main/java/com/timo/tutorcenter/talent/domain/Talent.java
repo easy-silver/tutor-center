@@ -3,6 +3,7 @@ package com.timo.tutorcenter.talent.domain;
 import com.timo.tutorcenter.accounts.domain.Accounts;
 import com.timo.tutorcenter.category.domain.CateMain;
 import com.timo.tutorcenter.category.domain.CateSub;
+import com.timo.tutorcenter.talent.infra.BooleanIntegerConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,13 +44,15 @@ public class Talent {
     @JoinColumn(name = "CateSub")
     private CateSub cateSub;
 
+    @Convert(converter = BooleanIntegerConverter.class)
     @ColumnDefault("0")
     @Column(name = "Is_Vod", nullable = false)
-    private int isVod;
+    private Boolean isVod;
 
+    @Convert(converter = BooleanIntegerConverter.class)
     @ColumnDefault("0")
     @Column(name = "IsSoldOut", nullable = false)
-    private int isSoldOut;
+    private Boolean isSoldOut;
 
     @Column(name = "RegisteredAtUtc", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -58,7 +61,7 @@ public class Talent {
     private LocalDateTime modifiedAt;
 
     @Builder
-    private Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub, int isVod, int isSoldOut) {
+    private Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub, boolean isVod, boolean isSoldOut) {
         this.owner = owner;
         this.title = title;
         this.status = status;
@@ -74,8 +77,8 @@ public class Talent {
                 .title("")
                 .status(TalentStatus.CREATED.getValue())
                 .mCategory(TalentType.OFFLINE.getValue())
-                .isVod(0)
-                .isSoldOut(0)
+                .isVod(false)
+                .isSoldOut(false)
                 .owner(owner)
                 .cateMain(cateMain)
                 .cateSub(cateSub)
