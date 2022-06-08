@@ -3,6 +3,7 @@ package com.timo.tutorcenter.talent.domain;
 import com.timo.tutorcenter.accounts.domain.Accounts;
 import com.timo.tutorcenter.category.domain.CateMain;
 import com.timo.tutorcenter.category.domain.CateSub;
+import com.timo.tutorcenter.talent.application.command.NewTalentCommand;
 import com.timo.tutorcenter.talent.infra.BooleanIntegerConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,6 +45,18 @@ public class Talent {
     @JoinColumn(name = "CateSub")
     private CateSub cateSub;
 
+    @Column(name = "MinPerson")
+    private Integer minPerson;
+
+    @Column(name = "MaxPerson")
+    private Integer maxPerson;
+
+    @Column(name = "GroupAvailable")
+    private Integer groupAvailable;
+
+    @Column(name = "TotalTimes")
+    private Integer totalTimes;
+
     @Convert(converter = BooleanIntegerConverter.class)
     @ColumnDefault("0")
     @Column(name = "Is_Vod", nullable = false)
@@ -61,27 +74,36 @@ public class Talent {
     private LocalDateTime modifiedAt;
 
     @Builder
-    private Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub, boolean isVod, boolean isSoldOut) {
+    public Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub,
+                  Integer minPerson, Integer maxPerson, Integer groupAvailable, Integer totalTimes, Boolean isVod, Boolean isSoldOut) {
         this.owner = owner;
         this.title = title;
         this.status = status;
         this.mCategory = mCategory;
         this.cateMain = cateMain;
         this.cateSub = cateSub;
+        this.minPerson = minPerson;
+        this.maxPerson = maxPerson;
+        this.groupAvailable = groupAvailable;
+        this.totalTimes = totalTimes;
         this.isVod = isVod;
         this.isSoldOut = isSoldOut;
     }
 
-    public static Talent createOfflineTalent(Accounts owner, CateMain cateMain, CateSub cateSub) {
+    public static Talent createOfflineTalent(NewTalentCommand command) {
         return Talent.builder()
+                .owner(command.getOwner())
+                .cateMain(command.getCateMain())
+                .cateSub(command.getCateSub())
+                .minPerson(command.getMinPerson())
+                .maxPerson(command.getMaxPerson())
+                .groupAvailable(command.getGroupAvailable().getValue())
+                .totalTimes(command.getTotalTimes())
                 .title("")
                 .status(TalentStatus.CREATED.getValue())
                 .mCategory(TalentType.OFFLINE.getValue())
                 .isVod(false)
                 .isSoldOut(false)
-                .owner(owner)
-                .cateMain(cateMain)
-                .cateSub(cateSub)
                 .build();
     }
 }
