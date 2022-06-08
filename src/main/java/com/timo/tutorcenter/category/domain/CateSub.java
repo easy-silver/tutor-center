@@ -22,13 +22,9 @@ public class CateSub {
     @JoinColumn(name = "Category")
     private CateMain cateMain;
 
-    @Column(name = "DisplayOrder")
-    private int displayOrder;
-
-    public CateSub(String name, CateMain cateMain, int displayOrder) {
+    public CateSub(String name, CateMain cateMain) {
         this.name = name;
         this.cateMain = cateMain;
-        this.displayOrder = displayOrder;
     }
 
 }

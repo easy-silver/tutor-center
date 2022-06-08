@@ -35,7 +35,7 @@ public class CategoryRestController {
         CateMain cateMain = cateMainRepository.findById(cateMainId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리"));
 
-        return SuccessResponse.success(cateSubRepository.findAllByCateMainOrderByDisplayOrderAsc(cateMain)
+        return SuccessResponse.success(cateSubRepository.findAllByCateMain(cateMain)
                 .stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList()));

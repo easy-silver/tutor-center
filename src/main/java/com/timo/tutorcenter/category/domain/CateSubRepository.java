@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CateSubRepository extends JpaRepository<CateSub, Long> {
 
-    List<CateSub> findAllByCateMainOrderByDisplayOrderAsc(CateMain cateMain);
+    List<CateSub> findAllByCateMain(CateMain cateMain);
 }
