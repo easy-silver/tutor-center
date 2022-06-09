@@ -11,7 +11,7 @@ public enum TalentStatus {
     OPEN("수업 오픈", 2),
     STOP("운영 중지", 3),
     HOLD("약관 승인 대기", 8),
-    EVALUATING("수업 평가중", 9);
+    EXAMINING("수업 평가중", 9);
 
     private final String title;
     private final int value;
