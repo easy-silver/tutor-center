@@ -44,4 +44,25 @@ class TalentRepositoryTest {
         assertThat(savedTalent.getMCategory()).isEqualTo(TalentType.OFFLINE.getValue());
     }
 
+    @DisplayName("클래스 아이디와 튜터 아이디로 조회")
+    @Test
+    void findByIdAndOwner() {
+        Accounts tester = accountsRepository.findById(1L).get();
+        CateMain cateMain = cateMainRepository.findById(24L).get();
+        CateSub cateSub = cateSubRepository.findAllByCateMain(cateMain).get(0);
+
+        Talent talent = Talent.createOfflineTalent(NewTalentCommand.builder()
+                .owner(tester)
+                .cateMain(cateMain)
+                .cateSub(cateSub).build());
+
+        Long savedTalentId = talentRepository.save(talent).getId();
+
+        //when
+        Talent findTalent = talentRepository.findByIdAndOwner(savedTalentId, tester).get();
+
+        //then
+        assertThat(findTalent.getCateMain().getName()).isEqualTo(cateMain.getName());
+    }
+
 }

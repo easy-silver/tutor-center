@@ -74,7 +74,7 @@ public class Talent {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub,
+    private Talent(Accounts owner, String title, int status, int mCategory, CateMain cateMain, CateSub cateSub,
                   Integer minPerson, Integer maxPerson, Integer groupAvailable, Integer totalTimes, Boolean isVod, Boolean isSoldOut) {
         this.owner = owner;
         this.title = title;
@@ -97,7 +97,7 @@ public class Talent {
                 .cateSub(command.getCateSub())
                 .minPerson(command.getMinPerson())
                 .maxPerson(command.getMaxPerson())
-                .groupAvailable(command.getGroupAvailable().getValue())
+                .groupAvailable(command.getGroupAvailable() == null ? null : command.getGroupAvailable().getValue())
                 .totalTimes(command.getTotalTimes())
                 .title("")
                 .status(TalentStatus.CREATED.getValue())
