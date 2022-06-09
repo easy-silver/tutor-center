@@ -11,7 +11,9 @@ import com.timo.tutorcenter.category.exception.CategoryNotFoundException;
 import com.timo.tutorcenter.talent.application.command.NewTalentCommand;
 import com.timo.tutorcenter.talent.domain.Talent;
 import com.timo.tutorcenter.talent.domain.TalentRepository;
+import com.timo.tutorcenter.talent.exception.TalentNotFoundException;
 import com.timo.tutorcenter.talent.web.dto.SelectTalentTypeRequest;
+import com.timo.tutorcenter.talent.web.dto.TalentCreateResponse;
 import com.timo.tutorcenter.talent.web.dto.SelectTalentTypeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,8 @@ public class TalentRegistrationService {
     private final CateSubRepository cateSubRepository;
     private final TalentRepository talentRepository;
 
-    public SelectTalentTypeResponse newTalent(SelectTalentTypeRequest request) {
-        Accounts owner = accountsRepository.findById(request.getOwnerId())
-                .orElseThrow(AccountNotFoundException::new);
+    public TalentCreateResponse newTalent(SelectTalentTypeRequest request) {
+        Accounts owner = findOwner(request.getOwnerId());
         CateMain cateMain = cateMainRepository.findById(request.getCateMainId())
                 .orElseThrow(CategoryNotFoundException::new);
         CateSub cateSub = cateSubRepository.findById(request.getCateSubId())
@@ -50,6 +51,20 @@ public class TalentRegistrationService {
 
         Long savedTalentId = talentRepository.save(talent).getId();
 
-        return new SelectTalentTypeResponse(savedTalentId);
+        return new TalentCreateResponse(savedTalentId);
     }
+
+    public SelectTalentTypeResponse getTalentTypeAndCategory(Long talentId, Long ownerId) {
+        Accounts owner = findOwner(ownerId);
+        Talent talent = talentRepository.findByIdAndOwner(talentId, owner)
+                .orElseThrow(TalentNotFoundException::new);
+
+        return new SelectTalentTypeResponse(talent);
+    }
+
+    private Accounts findOwner(Long request) {
+        return accountsRepository.findById(request)
+                .orElseThrow(AccountNotFoundException::new);
+    }
+
 }
