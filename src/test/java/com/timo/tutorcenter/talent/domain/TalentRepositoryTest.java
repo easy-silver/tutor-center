@@ -6,6 +6,7 @@ import com.timo.tutorcenter.category.domain.CateMain;
 import com.timo.tutorcenter.category.domain.CateMainRepository;
 import com.timo.tutorcenter.category.domain.CateSub;
 import com.timo.tutorcenter.category.domain.CateSubRepository;
+import com.timo.tutorcenter.talent.application.command.NewTalentCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,14 @@ class TalentRepositoryTest {
         CateMain cateMain = cateMainRepository.findById(24L).get();
         CateSub cateSub = cateSubRepository.findAllByCateMain(cateMain).get(0);
 
+        NewTalentCommand newTalentCommand = NewTalentCommand.builder()
+                .owner(tester)
+                .cateMain(cateMain)
+                .cateSub(cateSub)
+                .build();
+
         //when
-        Talent offlineTalent = Talent.createOfflineTalent(tester, cateMain, cateSub);
+        Talent offlineTalent = Talent.createOfflineTalent(newTalentCommand);
         Talent savedTalent = talentRepository.save(offlineTalent);
 
         //then
